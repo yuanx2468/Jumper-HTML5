@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
+<title>JumpJump</title>
+    <link rel="stylesheet" href="">
+    <script src="libs/createjs-2013.12.12.min.js"></script>
+    <script src="libs/TweenMax.min.js"></script>
+    <script src="src/Background.js"></script>
+    <script src="src/Rocks.js"></script>
+    <script src="src/Spark.js"></script>
+    <script src="src/Hero.js"></script>
+    <script src="main.js"></script>
+    <style>
+		body{
+			margin:0;
+			padding:0;
+			height:100%;
+			width:100%;
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body onload="init()">
+    <canvas id="gameCanvas" width="320" height="568">
+		如果你看见这些文字，说明你的浏览器不支持canvas标签，去换个高级的浏览器吧，比如Chrome或者Firefox！
+	</canvas>
+</body>
+</html>
