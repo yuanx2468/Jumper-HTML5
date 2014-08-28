@@ -1,50 +1,75 @@
 //定义全局变量
+var queue;//createjs加载后，将这个变量里放置一个资源加载器
 var stage;
-var bgBox;//把bgBox变为一个全局变量，这样就可以在其他函数中引用它了
-var ball;
+
+//这三个变量用于装载背景图形和图像
+var blueSky;
+var lowMountain;
+var highMountain;
 
 //定义一个初始化函数init，这个函数被绑定到main.html的body标记的onload属性上，所以当body的内容完成加载时，该函数将被执行。
 function init(){
-	//全局参数设置
-	
+	//全局参数设置	
 	//Ticker是createjs用于控制渲染频率的内部时钟
     createjs.Ticker.setFPS(60);
 	
 	//创建舞台引用
-	//还记得main.html文件中有一个canvas标记么，其ID是gameCanvas
-	//下面这行代码允许createjs把gameCanvas转化成一个舞台
-	//对于所有后续工作来说，这是必不可少的一步
     stage = new createjs.Stage("gameCanvas");
 	
-	//创造一个变量bgBox，这个变量将存放我们创建的形状
-	bgBox = new createjs.Shape();
-	//形状的宽度等于舞台的宽度
-	var boxWidth=stage.canvas.width;
-	//形状的高度等于舞台的高度
-	var boxHeight=stage.canvas.height;
-	//现在开始绘制,beginFill设置了bgBox要填充的颜色，drawRect设置了bgBox的x,y,width,height
-	bgBox.graphics.beginFill("#272c4d").drawRect(0,0,boxWidth,boxHeight);
-	//把绘制好的box放置在舞台上，如果不做这一步，box就不会显示
-	stage.addChild(bgBox);
 	
-	//绘制ball
-	ball = new createjs.Shape();
-	ball.graphics.beginFill("#fff").drawCircle(0,0,50);
-	stage.addChild(ball);	
+	//加载资源
+	//先构建一个资源加载器
+	queue=new createjs.LoadQueue(false);
 	
-	//绑定事件处理
-	stage.addEventListener("click",onClickStage);
+	//绑定加载完成后要执行的事件处理
+	queue.on("complete",onLoadQueueComplete,this);
 	
-	//Ticker是createjs用于控制渲染频率的内部时钟
+	//设置加载清单
+	queue.loadManifest([
+		{id:"lowMountain", src:"images/lowMountain.png"},
+		{id:"highMountain", src:"images/highMountain.png"}
+	])
+	//开始加载
+	queue.load();
+	
+}
+function setupBackground(){
+	//背景包括3层，由远到近分别是深蓝色天空、高山、矮山
+	
+	//天空的尺寸与舞台的尺寸一致
+	blueSky = new createjs.Shape();
+	var skyWidth=stage.canvas.width;
+	var skyHeight=stage.canvas.height;
+	blueSky.graphics.beginFill("#272c4d").drawRect(0,0,skyWidth,skyHeight);
+	stage.addChild(blueSky);
+	
+	//从queue获取highMountain的图像资源
+	highMountain = new createjs.Bitmap(queue.getResult("highMountain"));
+	//底部对齐，140是highMountain.png的高度
+	highMountain.y=stage.canvas.height-140;
+	stage.addChild(highMountain);	
+	
+	//从queue获取lowMountain的图像资源
+	lowMountain = new createjs.Bitmap(queue.getResult("lowMountain"));
+	//底部对齐，110是lowMountain.png的高度
+	lowMountain.y=stage.canvas.height-110;
+	stage.addChild(lowMountain);
+	
+}
+function onLoadQueueComplete (){
+	//当各类资源加载完毕后，就可以开始着手绘制了
+	
+	//绘制背景
+	setupBackground();
+	
+	//事件处理函数的绑定应该在所有绘制工作完成后进行
 	createjs.Ticker.addEventListener("tick",onTick);
+	stage.addEventListener("click",onClickStage);	
 }
 function onClickStage(){
 	console.log("你点击了stage");
 }
 function onTick(){
-	ball.x += 1;
-	ball.y += 1;
-	
-	//更新一下stage的显示，如果不做这一步，bgbox和ball就不会显示
+	//更新一下stage的显示
 	stage.update();	
 }
