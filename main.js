@@ -2,6 +2,7 @@
 var stage;
 var bgBox;//把bgBox变为一个全局变量，这样就可以在其他函数中引用它了
 var ball;
+var square;
 
 //定义一个初始化函数init，这个函数被绑定到main.html的body标记的onload属性上，所以当body的内容完成加载时，该函数将被执行。
 function init(){
@@ -32,14 +33,25 @@ function init(){
 	ball.graphics.beginFill("#fff").drawCircle(0,0,50);
 	stage.addChild(ball);	
 	
-	//绑定事件处理
-	stage.addEventListener("click",onClickStage);
+	//绘制square
+	square = new createjs.Shape();
+	square.graphics.beginFill("red").drawRect(0,0,50,50);
+	//定义注册点，注册点是元素进行位移、缩放和旋转等变化的参考点
+	//square是一个50*50的正方形，将注册点设置到(25,25)后，其缩放和旋转将围绕其视觉中心进行。
+	square.regX=25;
+	square.regY=25;
+	stage.addChild(square);
 	
+	
+	//绑定事件处理
+	stage.addEventListener("click",onClickStage);	
 	//Ticker是createjs用于控制渲染频率的内部时钟
 	createjs.Ticker.addEventListener("tick",onTick);
 }
-function onClickStage(){
+function onClickStage(evt){
 	console.log("你点击了stage");
+	//利用TweenMax插件，快速创建动画
+	TweenMax.to(square,0.3,{x:evt.stageX,y:evt.stageY,rotation:square.rotation+90});
 }
 function onTick(){
 	ball.x += 1;
