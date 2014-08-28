@@ -6,6 +6,8 @@ var ball;
 //定义一个初始化函数init，这个函数被绑定到main.html的body标记的onload属性上，所以当body的内容完成加载时，该函数将被执行。
 function init(){
 	//全局参数设置
+	
+	//Ticker是createjs用于控制渲染频率的内部时钟
     createjs.Ticker.setFPS(60);
 	
 	//创建舞台引用
@@ -33,7 +35,7 @@ function init(){
 	//绑定事件处理
 	stage.addEventListener("click",onClickStage);
 	
-	//Ticker是createjs用于控制和管理心跳机制的内部时钟
+	//Ticker是createjs用于控制渲染频率的内部时钟
 	createjs.Ticker.addEventListener("tick",onTick);
 }
 function onClickStage(){
