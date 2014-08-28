@@ -1,11 +1,7 @@
 //定义全局变量
 var queue;//createjs加载后，将这个变量里放置一个资源加载器
 var stage;
-
-//这三个变量用于装载背景图形和图像
-var blueSky;
-var lowMountain;
-var highMountain;
+var bg;//对Background的引用
 
 //定义一个初始化函数init，这个函数被绑定到main.html的body标记的onload属性上，所以当body的内容完成加载时，该函数将被执行。
 function init(){
@@ -33,34 +29,13 @@ function init(){
 	queue.load();
 	
 }
-function setupBackground(){
-	//背景包括3层，由远到近分别是深蓝色天空、高山、矮山
-	
-	//天空的尺寸与舞台的尺寸一致
-	blueSky = new createjs.Shape();
-	var skyWidth=stage.canvas.width;
-	var skyHeight=stage.canvas.height;
-	blueSky.graphics.beginFill("#272c4d").drawRect(0,0,skyWidth,skyHeight);
-	stage.addChild(blueSky);
-	
-	//从queue获取highMountain的图像资源
-	highMountain = new createjs.Bitmap(queue.getResult("highMountain"));
-	//底部对齐，140是highMountain.png的高度
-	highMountain.y=stage.canvas.height-140;
-	stage.addChild(highMountain);	
-	
-	//从queue获取lowMountain的图像资源
-	lowMountain = new createjs.Bitmap(queue.getResult("lowMountain"));
-	//底部对齐，110是lowMountain.png的高度
-	lowMountain.y=stage.canvas.height-110;
-	stage.addChild(lowMountain);
-	
-}
+
+
 function onLoadQueueComplete (){
 	//当各类资源加载完毕后，就可以开始着手绘制了
 	
 	//绘制背景
-	setupBackground();
+	bg=Background(queue,stage);
 	
 	//事件处理函数的绑定应该在所有绘制工作完成后进行
 	createjs.Ticker.addEventListener("tick",onTick);
@@ -70,6 +45,7 @@ function onClickStage(){
 	console.log("你点击了stage");
 }
 function onTick(){
-	//更新一下stage的显示
+	//更新显示
+	bg.update()
 	stage.update();	
 }
