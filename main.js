@@ -3,6 +3,7 @@ var queue;//createjs加载后，将这个变量里放置一个资源加载器
 var stage;
 var bg;//对Background的引用
 var hero;//对Hero的引用
+var rocks;//对Rocks的引用
 
 //定义一个初始化函数init，这个函数被绑定到main.html的body标记的onload属性上，所以当body的内容完成加载时，该函数将被执行。
 function init(){
@@ -36,7 +37,6 @@ function init(){
 
 
 function onLoadQueueComplete (){
-	console.log(Rocks);
 	//当各类资源加载完毕后，就可以开始着手绘制了
 	
 	//绘制背景
@@ -44,6 +44,11 @@ function onLoadQueueComplete (){
 	
 	//绘制主角
 	hero=Hero(queue,stage);
+	
+	//绘制陨石
+	rocks=Rocks(queue,stage);
+	
+	console.log(rocks)
 	
 	//事件处理函数的绑定应该在所有绘制工作完成后进行
 	createjs.Ticker.addEventListener("tick",onTick);
@@ -59,6 +64,7 @@ function onClickStage(){
 }
 function onTick(){
 	//更新显示
+	rocks.update();
 	hero.update();
 	bg.update();
 	stage.update();	
