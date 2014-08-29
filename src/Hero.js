@@ -45,8 +45,15 @@ function Hero(queue, stage) {
 		//需要提供给舞台调用的“外部”动作，写在return里
 		//当点击舞台时，stage需要指示Hero跳起
 		jump:function(){
+			//清除原有之前添加的动画效果
 			TweenMax.killTweensOf(hero);
-			TweenMax.to(hero,0.3,{y:(hero.y-80),rotation:-30,ease:Sine.easeOut,onComplete:fall});	
+			//跳跃动作，向上移动80px，逆时针旋转30度
+			TweenMax.to(hero,0.3,{
+				y:(hero.y-80),
+				rotation:-30,
+				ease:Sine.easeOut,
+				onComplete:fall
+			});	
 		},
 		update:function(){
 			
