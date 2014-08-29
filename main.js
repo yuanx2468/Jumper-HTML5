@@ -53,6 +53,7 @@ function onClickStage(){
 }
 function onTick(){
 	//更新显示
-	bg.update()
+	hero.update();
+	bg.update();
 	stage.update();	
 }
