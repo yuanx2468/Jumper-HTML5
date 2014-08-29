@@ -16,6 +16,25 @@ function Hero(queue, stage) {
 	//添加到舞台
     stage.addChild(hero);
 	
+	
+	//创建火焰Sprite Sheet
+	//获取图像数据
+	var flameData = {
+     	images: ["images/fire.png"],
+     	frames: {width:60, height:20},
+     	animations: {flameAnimation:[0,4]}
+	 };
+	//根据数据生成Sprite Sheet
+	var flameSpriteSheet = new createjs.SpriteSheet(flameData);
+	//根据Sprite Sheet生成火焰
+	var flame = new createjs.Sprite(flameSpriteSheet, "flameAnimation");
+	//调整火焰位置到火箭尾部
+	flame.x=-55;
+	flame.y=25;	
+	//将火焰作为一个子元素添加到hero里
+	hero.addChild(flame);
+	
+	
 	//定义角色的下落动作，这个动作是hero的“内部动作”，没有必要直接提供给舞台调用
 	function fall(){
 		//不完美地模拟自由落体
