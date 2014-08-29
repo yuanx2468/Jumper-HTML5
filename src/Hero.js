@@ -37,6 +37,7 @@ function Hero(queue, stage) {
 	//定义一个变量，用于判断hero是否处于昏迷状态，默认是false（未昏迷）
 	var isStunned = false;
 	
+	
 	//游戏设定hero只能在显示区域的范围内活动，
 	//所以，当hero碰到舞台顶部时就要被反弹下来，
 	//作为惩罚，我们要让hero处于短暂的昏迷，直到反弹结束

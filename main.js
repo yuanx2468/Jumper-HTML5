@@ -25,15 +25,18 @@ function init(){
 	queue.loadManifest([
 		{id:"lowMountain", src:"images/lowMountain.png"},
 		{id:"highMountain", src:"images/highMountain.png"},
-		{id:"hero", src:"images/hero.png"}
+		{id:"hero", src:"images/hero.png"},
+		{id:"rock", src:"images/rock.png"}
 	])
 	//开始加载
 	queue.load();
+	
 	
 }
 
 
 function onLoadQueueComplete (){
+	console.log(Rocks);
 	//当各类资源加载完毕后，就可以开始着手绘制了
 	
 	//绘制背景
@@ -44,7 +47,10 @@ function onLoadQueueComplete (){
 	
 	//事件处理函数的绑定应该在所有绘制工作完成后进行
 	createjs.Ticker.addEventListener("tick",onTick);
-	stage.addEventListener("click",onClickStage);	
+	stage.addEventListener("click",onClickStage);
+	
+	
+	
 }
 function onClickStage(){
 	console.log("你点击了stage");
