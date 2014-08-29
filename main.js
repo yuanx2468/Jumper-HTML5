@@ -48,8 +48,6 @@ function onLoadQueueComplete (){
 }
 function onClickStage(){
 	console.log("你点击了stage");
-	//每点击一次屏幕，就让hero跳起一次
-	hero.jump()
 }
 function onTick(){
 	//更新显示
