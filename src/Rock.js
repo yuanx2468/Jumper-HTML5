@@ -30,6 +30,8 @@ function Rock(queue,stage){
 	
 	return {
 		fly:function(flyTime,delayTime){
+			//flyToLeft()无法直接从Rock的外部调用
+			//这里的fly()可以被理解成开放给外部调用的一个快捷方式
 			flyToLeft(flyTime,delayTime)
 		},
 		update:function(){
