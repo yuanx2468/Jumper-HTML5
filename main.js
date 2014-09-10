@@ -35,8 +35,6 @@ function init(){
 	
 	
 }
-
-
 function onLoadQueueComplete (){
 	//当各类资源加载完毕后，就可以开始着手绘制了
 	
@@ -55,10 +53,6 @@ function onLoadQueueComplete (){
 		rocks.push(rock);
 	}
 	
-	
-	
-	console.log(rocks)
-	
 	//事件处理函数的绑定应该在所有绘制工作完成后进行
 	createjs.Ticker.addEventListener("tick",onTick);
 	stage.addEventListener("click",onClickStage);
@@ -72,6 +66,18 @@ function onClickStage(){
 	hero.jump()
 }
 function onTick(){
+	//每次刷新显示时都要碰撞检测
+	//要检测hero与每一块陨石的碰撞情况
+	for (var i = 0;i<rocks.length;i++){
+		if(checkCollision(hero.getHotspot(),rocks[i].getHotspot())){
+			if(hero.getY()>=rocks[i].getY()){
+				hero.pushDown();				
+			}else{
+				hero.pushUp();
+			}
+		}		
+	}
+	
 	//更新显示
 	//每一块石头都要更新
 	for(var i=0;i<MAX_ROCK_NUM;i++){
@@ -79,5 +85,18 @@ function onTick(){
 	}
 	hero.update();
 	bg.update();
-	stage.update();	
+	stage.update();
+	
+	
+}
+
+//碰撞检测球形算法
+function checkCollision(ballA,ballB){
+	var dxy=(ballA.x-ballB.x)*(ballA.x-ballB.x)+(ballA.y-ballB.y)*(ballA.y-ballB.y)
+	var dr=(ballA.r+ballB.r)*(ballA.r+ballB.r)
+	if(dxy>dr){
+		return false;
+	}else{
+		return true;
+	}
 }

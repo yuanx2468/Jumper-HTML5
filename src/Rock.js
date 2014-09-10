@@ -6,8 +6,7 @@ function Rock(queue,stage){
 	//从资源清单中创建rock
 	var rock = new createjs.Bitmap(queue.getResult("rock"));
 	
-	//把rock添加到舞台
-	stage.addChild(rock);
+	
 	
 	//指定注册点
 	rock.regX=50;
@@ -19,6 +18,9 @@ function Rock(queue,stage){
 	//随机初始位置，确保其在舞台显示区域之外
 	rock.x=stage.canvas.width+100;
 	rock.y=stage.canvas.height*(0.9-Math.random()*0.6);
+	
+	//把rock添加到舞台
+	stage.addChild(rock);
 	
 	function flyToLeft(flyTime,delayTime){
 		//在flyTime指定的时间内，让rock从舞台右侧飞到舞台左侧
@@ -50,6 +52,13 @@ function Rock(queue,stage){
 				var delayTime = 0;
 				flyToLeft(flyTime,delayTime);
 			}
+		},		
+		getHotspot:function(){
+			//获取rock的碰撞检测热区
+			return {x:rock.x,y:rock.y,r:50*rock.scaleX}
+		},
+		getY:function(){
+			return rock.y
 		}
 	}
 }

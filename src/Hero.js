@@ -105,6 +105,37 @@ function Hero(queue, stage) {
 				knockOnBottom();
 			}
 			
+		},
+		pushDown:function(){
+			hero.isStunned=true;
+			TweenMax.to(hero,0.8,{
+				y:(hero.y+100),
+				rotation:360,
+				ease:Back.easeOut,
+				onComplete:function(){
+					hero.stunned=false;
+					hero.rotation=0;				
+					fall();
+				}});
+		},
+		pushUp:function(){
+			hero.isStunned=true;
+			TweenMax.to(hero,0.8,{
+				y:(hero.y-100),
+				rotation:-360,
+				ease:Back.easeOut,
+				onComplete:function(){
+					hero.stunned=false;
+					hero.rotation=0;				
+					fall();
+				}});
+		},
+		getHotspot:function(){
+			//获取hero的碰撞检测热区
+			return {x:hero.x,y:hero.y,r:25}
+		},
+		getY:function(){
+			return hero.y
 		}
 	};
 }
