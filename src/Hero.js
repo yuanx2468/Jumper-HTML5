@@ -67,6 +67,7 @@ function Hero(queue, stage) {
 			ease:Back.easeOut,
 			onComplete:function(){
 				fall();
+				isStunned=false;
 		}});
 	}
 	
@@ -107,25 +108,25 @@ function Hero(queue, stage) {
 			
 		},
 		pushDown:function(){
-			hero.isStunned=true;
+			isStunned=true;
 			TweenMax.to(hero,0.8,{
 				y:(hero.y+100),
 				rotation:360,
 				ease:Back.easeOut,
 				onComplete:function(){
-					hero.stunned=false;
+					isStunned=false;
 					hero.rotation=0;				
 					fall();
 				}});
 		},
 		pushUp:function(){
-			hero.isStunned=true;
+			isStunned=true;
 			TweenMax.to(hero,0.8,{
 				y:(hero.y-100),
 				rotation:-360,
 				ease:Back.easeOut,
 				onComplete:function(){
-					hero.stunned=false;
+					isStunned=false;
 					hero.rotation=0;				
 					fall();
 				}});
