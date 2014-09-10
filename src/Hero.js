@@ -135,6 +135,9 @@ function Hero(queue, stage) {
 			//获取hero的碰撞检测热区
 			return {x:hero.x,y:hero.y,r:25}
 		},
+		getX:function(){
+			return hero.x
+		},
 		getY:function(){
 			return hero.y
 		}

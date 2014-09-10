@@ -75,6 +75,10 @@ function onTick(){
 			}else{
 				hero.pushUp();
 			}
+			//在碰撞的坐标处生成火花
+			var collidingX=rocks[i].getX()+(hero.getX()-rocks[i].getX())/2;
+			var collidingY=rocks[i].getY()+(hero.getY()-rocks[i].getY())/2;
+			drawSpark(stage,collidingX,collidingY);	
 		}		
 	}
 	
@@ -83,6 +87,7 @@ function onTick(){
 	for(var i=0;i<MAX_ROCK_NUM;i++){
 		rocks[i].update();
 	}
+	
 	hero.update();
 	bg.update();
 	stage.update();

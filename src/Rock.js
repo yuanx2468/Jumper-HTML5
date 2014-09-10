@@ -6,8 +6,6 @@ function Rock(queue,stage){
 	//从资源清单中创建rock
 	var rock = new createjs.Bitmap(queue.getResult("rock"));
 	
-	
-	
 	//指定注册点
 	rock.regX=50;
 	rock.regY=50;
@@ -56,6 +54,9 @@ function Rock(queue,stage){
 		getHotspot:function(){
 			//获取rock的碰撞检测热区
 			return {x:rock.x,y:rock.y,r:50*rock.scaleX}
+		},
+		getX:function(){
+			return rock.x
 		},
 		getY:function(){
 			return rock.y
