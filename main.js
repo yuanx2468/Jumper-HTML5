@@ -3,7 +3,8 @@ var queue;//createjs加载后，将这个变量里放置一个资源加载器
 var stage;
 var bg;//对Background的引用
 var hero;//对Hero的引用
-var rocks;//对Rocks的引用
+var rocks=[];//rock不止一块，所以我们用一个数组rocks来存放对所有rock的引用
+var MAX_ROCK_NUM = 4;//游戏画面中最多同时出现的石头数量
 
 //定义一个初始化函数init，这个函数被绑定到main.html的body标记的onload属性上，所以当body的内容完成加载时，该函数将被执行。
 function init(){
@@ -46,7 +47,15 @@ function onLoadQueueComplete (){
 	hero=Hero(queue,stage);
 	
 	//绘制陨石
-	rocks=Rocks(queue,stage);
+	for (var i=0;i<MAX_ROCK_NUM;i++){		
+		var rock = Rock(queue,stage);
+		var flyTime=Math.random()*5+3;
+		var delayTime = i;
+		rock.fly(flyTime,delayTime)
+		rocks.push(rock);
+	}
+	
+	
 	
 	console.log(rocks)
 	
@@ -64,7 +73,10 @@ function onClickStage(){
 }
 function onTick(){
 	//更新显示
-	rocks.update();
+	//每一块石头都要更新
+	for(var i=0;i<MAX_ROCK_NUM;i++){
+		rocks[i].update();
+	}
 	hero.update();
 	bg.update();
 	stage.update();	
