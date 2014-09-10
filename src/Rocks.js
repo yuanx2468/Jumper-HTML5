@@ -22,6 +22,14 @@ function Rocks(queue,stage){
 		//随机初始位置，确保其在舞台显示区域之外
 		rock.x=stage.canvas.width+100;
 		rock.y=stage.canvas.height*(0.9-Math.random()*0.6);
+		
+		//hotspotR是我们给rock设置的一个自定义属性
+		//这个属性定义了rock的碰撞检测范围
+		//因为我们使用的是一种圆形碰撞检测（将物体轮廓抽象成一个圆，以简化计算）
+		//所以hotspotR其实就是这个圆的半径
+		//具体来说，hotspotR的值应该是陨石图的宽度尺寸乘以缩放系数后再除以2
+		rock.hotspotR=rock.scaleX*100/2
+		
 
 		//随机生成rock穿越舞台所需的移动时间,这个时间决定了rock的移动速度
 		var flyTime = Math.random()*5+3;
