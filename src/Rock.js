@@ -19,14 +19,19 @@ function Rock(queue,stage){
 	//随机初始位置，确保其在舞台显示区域之外
 	rock.x=stage.canvas.width+100;
 	rock.y=stage.canvas.height*(0.9-Math.random()*0.6);
-
-	//随机生成rock穿越舞台所需的移动时间,这个时间决定了rock的移动速度
-	var flyTime = Math.random()*5+3;
 	
-	//让rock从舞台右侧飞到舞台左侧
-	TweenMax.to(rock,flyTime,{x:-100,rotation:720,ease:Linear.easeNone});
+	//陨石向左侧飞行的函数
+	function flyToLeft(flyTime,delayTime){
+		TweenMax.to(rock,flyTime,{x:-100,
+								  rotation:720,
+								  ease:Linear.easeNone,
+								  delay:delayTime});
+	}
 	
 	return {
+		fly:function(flyTime,delayTime){
+			flyToLeft(flyTime,delayTime)
+		},
 		update:function(){
 			//让陨石循环移动
 			//如果陨石的位置已经到达了舞台最左侧，就重置其位置、速度和尺寸
@@ -38,9 +43,8 @@ function Rock(queue,stage){
 				rock.scaleX=rock.scaleY=(Math.random()+1)/3;
 				rock.rotation=0;
 				var flyTime = Math.random()*5+3;
-				TweenMax.to(rock,flyTime,{x:-100,
-										  rotation:720,
-										  ease:Linear.easeNone});
+				var delayTime = 0;
+				flyToLeft(flyTime,delayTime);
 			}
 		}
 	}

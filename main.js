@@ -46,7 +46,10 @@ function onLoadQueueComplete (){
 	hero=Hero(queue,stage);
 	
 	//绘制陨石
-	rock=Rock(queue,stage);
+	rock=Rock(queue,stage);	
+	var flyTime = Math.random()*5+3;
+	var delayTime = 0;
+	rock.fly(flyTime,delayTime)
 	
 	console.log(rock)
 	
