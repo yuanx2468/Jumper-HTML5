@@ -10,11 +10,15 @@ function Hero(queue, stage) {
 	//设置注册点到图像的中心位置，图像尺寸为50*50
 	hero.regX=25;
 	hero.regY=25;
-	//处设置初始位置
+	//设置初始位置
     hero.x=100;
-    hero.y=200;
+    hero.y=100;
+	
 	//添加到舞台
     stage.addChild(hero);
+	
+	//开始下落
+	fall();
 	
 	
 	//创建火焰Sprite Sheet
@@ -36,7 +40,8 @@ function Hero(queue, stage) {
 	
 	//定义一个变量，用于判断hero是否处于昏迷状态，默认是false（未昏迷）
 	var isStunned = false;
-	
+	//定义一个变量，用于判断hero是否处于死亡状态，默认是false
+	var isDead = false;
 	
 	//游戏设定hero只能在显示区域的范围内活动，
 	//所以，当hero碰到舞台顶部时就要被反弹下来，
@@ -99,12 +104,14 @@ function Hero(queue, stage) {
 			}				
 		},
 		update:function(){
-			//判断hero的位置是否撞到舞台顶部
-			if(hero.y<=25){
-				knockOnCeiling();
-			} else if(hero.y>=stage.canvas.height-25){
-				knockOnBottom();
-			}
+			if(!isDead){
+				//判断hero的位置是否撞到舞台顶部
+				if(hero.y<=25){
+					knockOnCeiling();
+				} else if(hero.y>=stage.canvas.height-25){
+					knockOnBottom();
+				}
+			}			
 			
 		},
 		pushDown:function(){
@@ -140,6 +147,13 @@ function Hero(queue, stage) {
 		},
 		getY:function(){
 			return hero.y
+		},
+		die:function(){
+			isDead=true;
+			TweenMax.to(hero,2,{
+				y:(stage.canvas.height+200),
+				rotation:720,
+				ease:Sine.easeOut});
 		}
 	};
 }

@@ -6,6 +6,11 @@ var hero;//对Hero的引用
 var rocks=[];//rock不止一块，所以我们用一个数组rocks来存放对所有rock的引用
 var mine;
 var MAX_ROCK_NUM = 4;//游戏画面中最多同时出现的石头数量
+var lifeMeter;
+var life=100;//生命值初始为100;
+var mineMeter;
+var mineCollected=0;//能量矿石采集值初始为0;
+var gamePaused = false;
 
 //定义一个初始化函数init，这个函数被绑定到main.html的body标记的onload属性上，所以当body的内容完成加载时，该函数将被执行。
 function init(){
@@ -29,7 +34,9 @@ function init(){
 		{id:"lowMountain", src:"images/lowMountain.png"},
 		{id:"highMountain", src:"images/highMountain.png"},
 		{id:"hero", src:"images/hero.png"},
-		{id:"rock", src:"images/rock.png"}
+		{id:"rock", src:"images/rock.png"},
+		{id:"lifeMeter", src:"images/life_meter.png"},
+		{id:"mineMeter", src:"images/mine_meter.png"}
 	])
 	//开始加载
 	queue.load();
@@ -58,6 +65,10 @@ function onLoadQueueComplete (){
 	mine=Mine(stage);
 	mine.fly();
 	
+	//绘制UI部件
+	lifeMeter=LifeMeter(queue,stage);
+	mineMeter=MineMeter(queue,stage);
+	
 	//事件处理函数的绑定应该在所有绘制工作完成后进行
 	createjs.Ticker.addEventListener("tick",onTick);
 	stage.addEventListener("click",onClickStage);
@@ -69,26 +80,32 @@ function onClickStage(){
 	hero.jump()
 }
 function onTick(){
-	//每次刷新显示时都要碰撞检测
-	//检测hero与每一块陨石的碰撞情况
-	for (var i = 0;i<rocks.length;i++){
-		if(checkCollision(hero.getHotspot(),rocks[i].getHotspot())){
-			if(hero.getY()>=rocks[i].getY()){
-				hero.pushDown();				
-			}else{
-				hero.pushUp();
+	if(!gamePaused){
+		//每次刷新显示时都要碰撞检测
+		//检测hero与每一块陨石的碰撞情况
+		for (var i = 0;i<rocks.length;i++){
+			if(checkCollision(hero.getHotspot(),rocks[i].getHotspot())){
+				if(hero.getY()>=rocks[i].getY()){
+					hero.pushDown();
+					loseLife(5);
+				}else{
+					hero.pushUp();
+					loseLife(1);
+				}
+				//在碰撞的坐标处生成火花
+				var collidingX=rocks[i].getX()+(hero.getX()-rocks[i].getX())/2;
+				var collidingY=rocks[i].getY()+(hero.getY()-rocks[i].getY())/2;
+				drawSpark(stage,collidingX,collidingY);	
+			}		
+	}	
+		
+		//检测hero与mine的碰撞情况
+		if(checkCollision(hero.getHotspot(),mine.getHotspot())){			
+			mine.addToEnergyTank();
+			addMine(1);
 			}
-			//在碰撞的坐标处生成火花
-			var collidingX=rocks[i].getX()+(hero.getX()-rocks[i].getX())/2;
-			var collidingY=rocks[i].getY()+(hero.getY()-rocks[i].getY())/2;
-			drawSpark(stage,collidingX,collidingY);	
-		}		
 	}
 	
-	//检测hero与mine的碰撞情况
-	if(checkCollision(hero.getHotspot(),mine.getHotspot())){			
-		mine.addToEnergyTank();
-		}
 	
 	//更新显示
 	//每一块石头都要更新
@@ -99,8 +116,6 @@ function onTick(){
 	hero.update();
 	bg.update();
 	stage.update();
-	
-	
 }
 
 //碰撞检测球形算法
@@ -112,4 +127,25 @@ function checkCollision(ballA,ballB){
 	}else{
 		return true;
 	}
+}
+//损失生命值
+function loseLife(value){
+	life-=value;
+	if(life<=0){
+		gamePaused=true;
+		life=0;
+		hero.die()
+	}
+	lifeMeter.setValue(life);
+	
+}
+//损失生命值
+function addMine(value){
+	mineCollected+=value;
+	if(mineCollected>=100){
+		gamePaused=true;
+		mineCollected=100;
+	}
+	mineMeter.setValue(mineCollected);
+	
 }
