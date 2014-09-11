@@ -1,5 +1,5 @@
 /*
-Rocks.js负责控制和管理游戏中的各种陨石。
+Rock.js负责控制和管理游戏中的各种陨石。
 */
 function Rock(queue,stage){
 	

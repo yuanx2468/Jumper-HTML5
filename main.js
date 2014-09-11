@@ -4,6 +4,7 @@ var stage;
 var bg;//对Background的引用
 var hero;//对Hero的引用
 var rocks=[];//rock不止一块，所以我们用一个数组rocks来存放对所有rock的引用
+var mine;
 var MAX_ROCK_NUM = 4;//游戏画面中最多同时出现的石头数量
 
 //定义一个初始化函数init，这个函数被绑定到main.html的body标记的onload属性上，所以当body的内容完成加载时，该函数将被执行。
@@ -53,11 +54,13 @@ function onLoadQueueComplete (){
 		rocks.push(rock);
 	}
 	
+	//绘制能量矿石
+	mine=Mine(stage);
+	mine.fly();
+	
 	//事件处理函数的绑定应该在所有绘制工作完成后进行
 	createjs.Ticker.addEventListener("tick",onTick);
 	stage.addEventListener("click",onClickStage);
-	
-	
 	
 }
 function onClickStage(){
@@ -67,7 +70,7 @@ function onClickStage(){
 }
 function onTick(){
 	//每次刷新显示时都要碰撞检测
-	//要检测hero与每一块陨石的碰撞情况
+	//检测hero与每一块陨石的碰撞情况
 	for (var i = 0;i<rocks.length;i++){
 		if(checkCollision(hero.getHotspot(),rocks[i].getHotspot())){
 			if(hero.getY()>=rocks[i].getY()){
@@ -82,12 +85,17 @@ function onTick(){
 		}		
 	}
 	
+	//检测hero与mine的碰撞情况
+	if(checkCollision(hero.getHotspot(),mine.getHotspot())){			
+		mine.addToEnergyTank();
+		}
+	
 	//更新显示
 	//每一块石头都要更新
 	for(var i=0;i<MAX_ROCK_NUM;i++){
 		rocks[i].update();
 	}
-	
+	mine.update();
 	hero.update();
 	bg.update();
 	stage.update();
