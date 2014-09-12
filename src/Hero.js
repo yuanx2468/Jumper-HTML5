@@ -10,16 +10,6 @@ function Hero(queue, stage) {
 	//设置注册点到图像的中心位置，图像尺寸为50*50
 	hero.regX=25;
 	hero.regY=25;
-	//设置初始位置
-    hero.x=100;
-    hero.y=100;
-	
-	//添加到舞台
-    stage.addChild(hero);
-	
-	//开始下落
-	fall();
-	
 	
 	//创建火焰Sprite Sheet
 	//获取图像数据
@@ -36,7 +26,10 @@ function Hero(queue, stage) {
 	flame.x=-55;
 	flame.y=25;	
 	//将火焰作为一个子元素添加到hero里
-	hero.addChild(flame);
+	hero.addChild(flame);	
+	//设置初始位置
+	hero.x=100;
+	hero.y=200;
 	
 	//定义一个变量，用于判断hero是否处于昏迷状态，默认是false（未昏迷）
 	var isStunned = false;
@@ -148,12 +141,39 @@ function Hero(queue, stage) {
 		getY:function(){
 			return hero.y
 		},
-		die:function(){
+		die:function(){			
 			isDead=true;
 			TweenMax.to(hero,2,{
 				y:(stage.canvas.height+200),
 				rotation:720,
 				ease:Sine.easeOut});
+		},
+		return:function(){
+			//hero胜利返航
+			TweenMax.killTweensOf(hero);
+			TweenMax.to(hero,1,{x:stage.canvas.width+100,
+								rotation:0,
+								ease:Linear.easeNone})
+			
+		},
+		show:function(){			
+			//在调用这个show函数之前,hero不会出现在画面上
+			//重新设置位置和状态
+			hero.x=100;
+			hero.y=200;
+			hero.rotation=0;
+			isStunned = false;
+			isDead = false;
+
+			//添加到舞台
+			stage.addChild(hero);
+
+			//开始下落
+			fall();
+		},
+		hide:function(){
+			//添加到舞台
+			stage.removeChild(hero);			
 		}
 	};
 }

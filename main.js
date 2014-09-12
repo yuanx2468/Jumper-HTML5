@@ -7,10 +7,14 @@ var rocks=[];//rock不止一块，所以我们用一个数组rocks来存放对�
 var mine;
 var MAX_ROCK_NUM = 4;//游戏画面中最多同时出现的石头数量
 var lifeMeter;
-var life=100;//生命值初始为100;
 var mineMeter;
+var startScreen;
+var gameOverScreen;
+var gameWinScreen;
+
 var mineCollected=0;//能量矿石采集值初始为0;
-var gamePaused = false;
+var life=100;//生命值初始为100;
+var gamePaused = true;
 
 //定义一个初始化函数init，这个函数被绑定到main.html的body标记的onload属性上，所以当body的内容完成加载时，该函数将被执行。
 function init(){
@@ -36,13 +40,15 @@ function init(){
 		{id:"hero", src:"images/hero.png"},
 		{id:"rock", src:"images/rock.png"},
 		{id:"lifeMeter", src:"images/life_meter.png"},
-		{id:"mineMeter", src:"images/mine_meter.png"}
+		{id:"mineMeter", src:"images/mine_meter.png"},
+		{id:"bannerTitle", src:"images/banner_title.png"},
+		{id:"bannerGameOver", src:"images/banner_gameover.png"},
+		{id:"bannerWin", src:"images/banner_win.png"}
 	])
 	//开始加载
 	queue.load();
-	
-	
 }
+//加载完毕事件处理
 function onLoadQueueComplete (){
 	//当各类资源加载完毕后，就可以开始着手绘制了
 	
@@ -69,16 +75,31 @@ function onLoadQueueComplete (){
 	lifeMeter=LifeMeter(queue,stage);
 	mineMeter=MineMeter(queue,stage);
 	
+	//开始屏幕
+	startScreen= StartScreen(queue,stage);
+	startScreen.show();
+	
+	//gameover屏幕
+	gameOverScreen= GameOverScreen(queue,stage);
+	
+	//胜利屏幕
+	gameWinScreen= GameWinScreen(queue,stage);
+	
 	//事件处理函数的绑定应该在所有绘制工作完成后进行
 	createjs.Ticker.addEventListener("tick",onTick);
 	stage.addEventListener("click",onClickStage);
 	
 }
+//点击舞台事件处理
 function onClickStage(){
 	console.log("你点击了stage");
 	//每点击一次屏幕，就让hero跳起一次
-	hero.jump()
+	if(!gamePaused){
+		hero.jump()
+	}
+	
 }
+//滴答
 function onTick(){
 	if(!gamePaused){
 		//每次刷新显示时都要碰撞检测
@@ -102,7 +123,7 @@ function onTick(){
 		//检测hero与mine的碰撞情况
 		if(checkCollision(hero.getHotspot(),mine.getHotspot())){			
 			mine.addToEnergyTank();
-			addMine(1);
+			addMine(50);
 			}
 	}
 	
@@ -131,21 +152,49 @@ function checkCollision(ballA,ballB){
 //损失生命值
 function loseLife(value){
 	life-=value;
-	if(life<=0){
-		gamePaused=true;
+	if(life<=0){		
 		life=0;
-		hero.die()
+		gameOver();
 	}
 	lifeMeter.setValue(life);
 	
 }
-//损失生命值
+//采矿得分
 function addMine(value){
 	mineCollected+=value;
 	if(mineCollected>=100){
-		gamePaused=true;
 		mineCollected=100;
+		win();
 	}
 	mineMeter.setValue(mineCollected);
 	
+}
+
+//开始游戏
+function startGame(){
+	//重置游戏数值
+	gamePaused = false;
+	mineCollected = 0
+	life = 100;
+	//重置UI
+	mineMeter.setValue(mineCollected);
+	lifeMeter.setValue(life);
+	//显示hero
+	hero.show();
+}
+//gameOver
+function gameOver(){
+	gamePaused=true;
+	//hero死亡
+	hero.die();
+	//显示gameover屏幕
+	gameOverScreen.show();
+}
+//玩家胜利
+function win(){
+	gamePaused=true;
+	//hero死亡
+	hero.return();
+	//显示gameover屏幕
+	gameWinScreen.show();
 }
