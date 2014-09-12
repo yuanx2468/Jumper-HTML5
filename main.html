@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
 <title>Jumper</title>
 <script src="libs/createjs-2013.12.12.min.js"></script>
 <script src="libs/TweenMax.min.js"></script>
@@ -16,6 +17,19 @@
 <script src="src/GameOverScreen.js"></script>
 <script src="src/GameWinScreen.js"></script>
 <script src="main.js"></script>
+<style>
+		body{
+			margin:0;
+			padding:0;
+			height:100%;
+			width:100%;
+			text-align: center;
+			overflow: hidden;
+		}
+		#gameCanvas{
+			margin:auto;
+		}
+	</style>
 </head>
 <!--注意这里的onload属性，这里定义了当body标记的内容加载完成后，将首先执行init()函数，该函数被定义在main.js这个文件里-->
 <body onload="init()">
