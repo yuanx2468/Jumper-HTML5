@@ -123,7 +123,7 @@ function onTick(){
 		//检测hero与mine的碰撞情况
 		if(checkCollision(hero.getHotspot(),mine.getHotspot())){			
 			mine.addToEnergyTank();
-			addMine(50);
+			addMine(1);
 			}
 	}
 	
