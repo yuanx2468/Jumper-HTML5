@@ -26,7 +26,8 @@ function init(){
 	
 	//创建舞台引用
     stage = new createjs.Stage("gameCanvas");
-	
+	//启用触屏支持
+	createjs.Touch.enable(stage);
 	
 	
 	//加载资源
