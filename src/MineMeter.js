@@ -15,7 +15,7 @@ function MineMeter(queue, stage) {
     mineMeter.y=10;
 	
 	//创建一个记录分数的文本
-	var textField = new createjs.Text("0", "20px Verdana bold", "#272c4d");
+	var textField = new createjs.Text("0", "bold 20px Verdana", "#272c4d");
 	//文本居中对齐
 	textField.textAlign="center"; 
 	textField.x = 25; 
