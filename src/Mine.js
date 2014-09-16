@@ -20,6 +20,12 @@ function Mine(stage){
 	//添加到舞台
 	stage.addChild(mine);
 	
+	//当能量矿石与hero碰撞后并飞向能量槽的过程中
+	//能量矿石有可能再次与hero产生交叠
+	//而我们应该避免重复进行碰撞检测
+	//通过设置isCollidable变量，我们可以避免不必要的重复进行碰撞检测
+	var collidable=true;
+	
 	
 	function flyToLeft(flyTime,delayTime){
 		//在flyTime指定的时间内，让mine从舞台右侧飞到舞台左侧
@@ -38,6 +44,7 @@ function Mine(stage){
 		mine.alpha=1;
 		mine.rotation=0;
 		mine.scaleX=mine.scaleY=1;
+		collidable=true;
 		
 		
 		//自动重新开始Tween动画
@@ -77,12 +84,22 @@ function Mine(stage){
 							ease:Sine.easeOut,
 							onComplete:reset,
 							});
+			//飞向能量槽的过程中，应避免再次碰撞检测
+			collidable=false;
 						
 		},
 		fly:function(){
 			var flyTime=Math.random()*5+3;
 			var delayTime = Math.random()*3+3;
 			flyToLeft(flyTime,delayTime)
+		},
+		isCollidable:function(){
+			//判断是否可以进行碰撞检测
+			if(collidable){
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
 }

@@ -12,6 +12,8 @@ var startScreen;
 var gameOverScreen;
 var gameWinScreen;
 
+var howtoScreen;
+
 var mineCollected=0;//能量矿石采集值初始为0;
 var life=100;//生命值初始为100;
 var gamePaused = true;
@@ -24,6 +26,7 @@ function init(){
 	
 	//创建舞台引用
     stage = new createjs.Stage("gameCanvas");
+	
 	
 	
 	//加载资源
@@ -43,7 +46,10 @@ function init(){
 		{id:"mineMeter", src:"images/mine_meter.png"},
 		{id:"bannerTitle", src:"images/banner_title.png"},
 		{id:"bannerGameOver", src:"images/banner_gameover.png"},
-		{id:"bannerWin", src:"images/banner_win.png"}
+		{id:"bannerWin", src:"images/banner_win.png"},
+		{id:"howTo1", src:"images/howto1.png"},
+		{id:"howTo2", src:"images/howto2.png"},
+		{id:"howTo3", src:"images/howto3.png"}
 	])
 	//开始加载
 	queue.load();
@@ -121,10 +127,17 @@ function onTick(){
 	}	
 		
 		//检测hero与mine的碰撞情况
-		if(checkCollision(hero.getHotspot(),mine.getHotspot())){			
-			mine.addToEnergyTank();
-			addMine(1);
-			}
+		if(checkCollision(hero.getHotspot(),mine.getHotspot())){
+			//确保能量矿石当前是可以进行碰撞检测的
+			console.log(mine.isCollidable())
+			if(mine.isCollidable()){
+				mine.addToEnergyTank();
+				addMine(1);
+				//降低难度，采集到一个矿石就加一点生命
+				addLife(1);
+			}		
+			
+		}
 	}
 	
 	
@@ -149,6 +162,7 @@ function checkCollision(ballA,ballB){
 		return true;
 	}
 }
+
 //损失生命值
 function loseLife(value){
 	life-=value;
@@ -158,6 +172,14 @@ function loseLife(value){
 	}
 	lifeMeter.setValue(life);
 	
+}
+//增加生命值
+function addLife(value){
+	life+=value;
+	if(life>=100){		
+		life=100;
+	}
+	lifeMeter.setValue(life);
 }
 //采矿得分
 function addMine(value){
